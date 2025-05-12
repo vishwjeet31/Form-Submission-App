@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile-backend
+    ports:
+      - "8010:5000"  # Host:Container (Flask runs on 5000 inside)
+    restart: always
+
+  frontend:
+    build:
+      context: ./nodefrontend
+      dockerfile: Dockerfile-frontend
+    ports:
+      - "4000:3000"  # Host:Container (React/Node frontend runs on 3000)
+    environment:
+      - BACKEND_URL=http://backend:5000/submit  # backend is the service name
+    depends_on:
+      - backend
+
